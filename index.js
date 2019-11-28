@@ -36,8 +36,9 @@ const clusterDB = process.env.ClUSTER_DB_URI;
 
 // Connect to MongoDB Options
 const options = {
+	useUnifiedTopology: true,
 	useNewUrlParser: true,
-	dbName: 'ever',
+	dbName: 'everAuth',
 	useCreateIndex: true,
 	useFindAndModify: false,
 	autoIndex: false, // Don't build indexes
@@ -51,15 +52,13 @@ const options = {
 	family: 4 // Use IPv4, skip trying IPv6
 };
 
-// // Connect to MongoDB
-// mongoose
-// 	.connect(clusterDB, options)
-// 	.then(console.log('MongoDB Connected'))
-// 	.catch(err => console.log(err));
+// Connect to MongoDB
+mongoose
+	.connect(clusterDB, options)
+	.then(console.log('MongoDB Connected'))
+	.catch(err => console.log(err));
 
 // Routes
-// const token = require('./routes/v1/token');
-// app.use('/api/v1/token', token);
 const auth = require('./routes/v1/authentication');
 app.use('/api/v1/auth', auth);
 
