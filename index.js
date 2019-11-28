@@ -1,6 +1,7 @@
 const express = require('express');
 const jwt = require('express-jwt');
 const mongoose = require('mongoose');
+const passport = require('passport');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const dotenv = require('dotenv');
@@ -15,21 +16,6 @@ app.use(cors());
 // Body parser middleware
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-
-// // Authentication
-// app.use(
-// 	jwt({
-// 		secret,
-// 		getToken: (fromHeaderOrQuerystring = req => {
-// 			if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
-// 				return req.headers.authorization.split(' ')[1];
-// 			} else if (req.query && req.query.token) {
-// 				return req.query.token;
-// 			}
-// 			return null;
-// 		})
-// 	}).unless({ path: ['/api/v1/token'] })
-// );
 
 //DB Config
 const clusterDB = process.env.ClUSTER_DB_URI;
@@ -57,6 +43,10 @@ mongoose
 	.connect(clusterDB, options)
 	.then(console.log('MongoDB Connected'))
 	.catch(err => console.log(err));
+
+// initialize passport
+app.use(passport.initialize());
+app.use(passport.session());
 
 // Routes
 const auth = require('./routes/v1/authentication');
