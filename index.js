@@ -16,20 +16,20 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-// Authentication
-app.use(
-	jwt({
-		secret,
-		getToken: (fromHeaderOrQuerystring = req => {
-			if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
-				return req.headers.authorization.split(' ')[1];
-			} else if (req.query && req.query.token) {
-				return req.query.token;
-			}
-			return null;
-		})
-	}).unless({ path: ['/api/v1/token'] })
-);
+// // Authentication
+// app.use(
+// 	jwt({
+// 		secret,
+// 		getToken: (fromHeaderOrQuerystring = req => {
+// 			if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
+// 				return req.headers.authorization.split(' ')[1];
+// 			} else if (req.query && req.query.token) {
+// 				return req.query.token;
+// 			}
+// 			return null;
+// 		})
+// 	}).unless({ path: ['/api/v1/token'] })
+// );
 
 //DB Config
 const clusterDB = process.env.ClUSTER_DB_URI;
@@ -58,8 +58,10 @@ const options = {
 // 	.catch(err => console.log(err));
 
 // Routes
-const token = require('./routes/v1/token');
-app.use('/api/v1/token', token);
+// const token = require('./routes/v1/token');
+// app.use('/api/v1/token', token);
+const auth = require('./routes/v1/authentication');
+app.use('/api/v1/auth', auth);
 
 const port = process.env.PORT || 3005;
 
